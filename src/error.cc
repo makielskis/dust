@@ -2,7 +2,7 @@
 // Licensed under the MIT license
 // https://raw.github.com/makielski/botscript/master/COPYING
 
-#include "./error.h"
+#include "dust/error.h"
 
 namespace dust {
 

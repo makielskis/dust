@@ -2,7 +2,7 @@
 // Licensed under the MIT license
 // https://raw.github.com/makielski/botscript/master/COPYING
 
-#include "./document.h"
+#include "dust/document.h"
 
 #include <utility>
 #include <algorithm>
@@ -11,9 +11,9 @@
 #include "boost/algorithm/string/split.hpp"
 #include "boost/system/system_error.hpp"
 
-#include "./storage/key_value_store.h"
-#include "./document_visitor.h"
-#include "./error.h"
+#include "dust/storage/key_value_store.h"
+#include "dust/document_visitor.h"
+#include "dust/error.h"
 
 namespace dust {
 

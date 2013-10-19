@@ -2,7 +2,7 @@
 // Licensed under the MIT license
 // https://raw.github.com/makielski/botscript/master/COPYING
 
-#include "./mem_store.h"
+#include "dust/storage/mem_store.h"
 
 namespace dust {
 

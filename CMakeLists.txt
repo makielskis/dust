@@ -6,6 +6,7 @@ add_definitions(-std=c++11)
 add_subdirectory(external_lib/leveldb)
 include_directories("external_lib/leveldb/include")
 include_directories("external_lib/rapidjson/include")
+include_directories("include")
 
 
 ################################

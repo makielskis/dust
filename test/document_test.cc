@@ -5,8 +5,8 @@
 
 #include "boost/system/system_error.hpp"
 
-#include "../src/document.h"
-#include "../src/storage/mem_store.h"
+#include "dust/document.h"
+#include "dust/storage/mem_store.h"
 
 using namespace dust;
 

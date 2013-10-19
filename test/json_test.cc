@@ -4,8 +4,8 @@
 
 #include "rapidjson/rapidjson_with_exception.h"
 
-#include "../src/storage/mem_store.h"
-#include "../src/json_visitor.h"
+#include "dust/storage/mem_store.h"
+#include "dust/json_visitor.h"
 
 
 using namespace dust;

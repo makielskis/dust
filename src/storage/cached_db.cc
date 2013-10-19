@@ -2,10 +2,10 @@
 // Licensed under the MIT license
 // https://raw.github.com/makielski/botscript/master/COPYING
 
-#include "cached_db.h"
+#include "dust/storage/cached_db.h"
 
-#include "./mem_store.h"
-#include "./lvl_db_store.h"
+#include "dust/storage/mem_store.h"
+#include "dust/storage/lvl_db_store.h"
 
 namespace dust {
 

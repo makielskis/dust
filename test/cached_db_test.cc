@@ -5,7 +5,7 @@
 
 #include "boost/filesystem.hpp"
 
-#include "../src/storage/cached_db.h"
+#include "dust/storage/cached_db.h"
 
 #define DB_PATH "test_db"
 

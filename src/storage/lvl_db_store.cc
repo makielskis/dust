@@ -2,7 +2,7 @@
 // Licensed under the MIT license
 // https://raw.github.com/makielski/botscript/master/COPYING
 
-#include "./lvl_db_store.h"
+#include "dust/storage/lvl_db_store.h"
 
 #include <cassert>
 
