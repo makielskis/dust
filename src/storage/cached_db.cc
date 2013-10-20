@@ -12,6 +12,9 @@ namespace dust {
 cached_db::cached_db(const std::string& path)
     : db_(new lvl_db_store(path)),
       cache_(new mem_store()) {
+  for (const auto& el : db_->all()) {
+    cache_->set(el.first, el.second);
+  }
 }
 
 cached_db::~cached_db() {
@@ -29,6 +32,10 @@ void cached_db::set(const std::string& key, const std::string& value) {
 void cached_db::remove(const std::string& key) {
   cache_->remove(key);
   db_->remove(key);
+}
+
+std::map<std::string, std::string> cached_db::all() const {
+  return cache_->all();
 }
 
 }  // namespace dust

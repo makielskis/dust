@@ -18,7 +18,9 @@ class cached_db_test : public testing::Test {
 
  protected:
   virtual void TearDown() override {
-    delete db_;
+    if (db_ != nullptr) {
+      delete db_;
+    }
     boost::filesystem::remove_all(DB_PATH);
   }
 
@@ -42,9 +44,8 @@ TEST_F(cached_db_test, put_get) {
  */
 TEST_F(cached_db_test, remove) {
   db_->set("Hello", "World");
-  boost::optional<std::string> v;
 
-  v = db_->get("Hello");
+  boost::optional<std::string> v = db_->get("Hello");
   ASSERT_TRUE(v);
   EXPECT_EQ("World", v.get());
 
@@ -54,22 +55,21 @@ TEST_F(cached_db_test, remove) {
 }
 
 /*
- * ### Measure Time ###
+ * ### Test get all ###
  */
-TEST_F(cached_db_test, time_measurement) {
-  using std::chrono::duration_cast;
-  using std::chrono::microseconds;
-  using std::chrono::steady_clock;
+TEST_F(cached_db_test, all) {
+  db_->set("Hello", "World");
+  EXPECT_EQ("World", db_->all()["Hello"]);
+}
 
-  steady_clock::time_point start = steady_clock::now();
-
+/*
+ * ### Test get all ###
+ */
+TEST_F(cached_db_test, reload) {
   db_->set("Hello", "World");
 
-  boost::optional<std::string> v = db_->get("Hello");
-  ASSERT_TRUE(v);
-  EXPECT_EQ("World", v.get());
+  delete db_;
+  db_ = new cached_db(DB_PATH);
 
-  steady_clock::time_point end = steady_clock::now();
-  auto duration_in_us = duration_cast<microseconds>(end - start).count();
-  ASSERT_LE(duration_in_us, 1000);
+  EXPECT_EQ("World", db_->all()["Hello"]);
 }

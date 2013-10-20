@@ -28,4 +28,8 @@ void mem_store::remove(const std::string& key) {
   auto removed_el_count = map_.erase(key);
 }
 
+std::map<std::string, std::string> mem_store::all() const {
+  return { map_.begin(), map_.end() };
+}
+
 }  // namespace dust

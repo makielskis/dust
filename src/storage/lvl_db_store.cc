@@ -5,6 +5,7 @@
 #include "dust/storage/lvl_db_store.h"
 
 #include <cassert>
+#include <memory>
 
 #include "leveldb/db.h"
 
@@ -43,6 +44,16 @@ void lvl_db_store::remove(const std::string& key) {
   }
 }
 
+std::map<std::string, std::string> lvl_db_store::all() const {
+  std::map<std::string, std::string> entries;
+  std::unique_ptr<leveldb::Iterator> i(db_->NewIterator(leveldb::ReadOptions()));
+  for (i->SeekToFirst(); i->Valid(); i->Next()) {
+    entries[i->key().ToString()] = i->value().ToString();
+  }
+  assert(i->status().ok());
+  return entries;
+}
+
 leveldb::DB* lvl_db_store::create_db(const std::string& path) {
   leveldb::DB* db = nullptr;
   leveldb::Options options;
@@ -51,7 +62,6 @@ leveldb::DB* lvl_db_store::create_db(const std::string& path) {
   if (!s.ok()) {
     throw db_exception();
   }
-  assert(db != nullptr && "Initialized DB should be != nullptr");
   return db;
 }
 

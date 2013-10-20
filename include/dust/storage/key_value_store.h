@@ -6,6 +6,7 @@
 #define DUST_STORAGE_KEY_VALUE_STORE_H_
 
 #include <string>
+#include <map>
 
 #include "boost/optional.hpp"
 
@@ -37,6 +38,9 @@ class key_value_store {
 
   /// \param key  the key to remove
   virtual void remove(const std::string& key) = 0;
+
+  /// \return all key/value pairs
+  virtual std::map<std::string, std::string> all() const = 0;
 };
 
 }  // namespace dust
