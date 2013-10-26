@@ -23,7 +23,10 @@ namespace error {
 
     override_with_composite = 120,
 
-    store_dead = 130
+    store_dead = 130,
+
+    unsupported_value_type =  140,
+    invalid_json = 141
   };
 
   enum error_condition_t {

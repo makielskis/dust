@@ -24,14 +24,14 @@ void insert_json_recursive(document& d, const json::Value& v) {
       insert_json_recursive(child_doc, i->value);
     }
   } else {
-    throw boost::system::system_error(error::parent_not_a_composite);
+    throw boost::system::system_error(error::unsupported_value_type);
   }
 }
 
 void insert_json(document& d, const std::string& json_string) {
   json::Document json_document;
   if (json_document.Parse<0>(json_string.c_str()).HasParseError()) {
-    throw boost::system::system_error(error::value_does_not_exist);
+    throw boost::system::system_error(error::invalid_json);
   }
   insert_json_recursive(d, json_document);
 }

@@ -37,6 +37,12 @@ std::string error_category_impl::message(int ev) const noexcept {
     case error::store_dead:
       return "Database problem: reference to database lost";
 
+    case error::unsupported_value_type:
+      return "Insertion problem: unsupported datatype (not String/Object)";
+
+    case error::invalid_json:
+      return "Insertion problem: invalid JSON string";
+
     default:
       return "Unknown error";
   }
