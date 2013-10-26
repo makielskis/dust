@@ -96,11 +96,12 @@ void document::accept(document_visitor& visitor) {
   if (is_composite()) {
     visitor.composite_start(*this);
     for (auto& child : children()) {
+      visitor.visit_key(child);
       child.accept(visitor);
     }
     visitor.composite_end(*this);
   } else {
-    visitor.visit_value_document(*this);
+    visitor.visit_value(*this);
   }
 }
 

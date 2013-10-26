@@ -26,9 +26,6 @@ class json_visitor : public document_visitor {
   }
 
   virtual void composite_start(document& doc) override {
-    std::string index = doc.index();
-		writer_.String(index.c_str(),
-                   static_cast<rapidjson::SizeType>(index.length()));
     writer_.StartObject();
   }
 
@@ -36,10 +33,14 @@ class json_visitor : public document_visitor {
     writer_.EndObject();
   }
 
-  virtual void visit_value_document(document& doc) override {
-    std::string index = doc.index(), value = doc.val();
+  virtual void visit_key(document& doc) override {
+    std::string index = doc.index();
 		writer_.String(index.c_str(),
                    static_cast<rapidjson::SizeType>(index.length()));
+  }
+
+  virtual void visit_value(document& doc) override {
+    std::string value = doc.val();
 		writer_.String(value.c_str(),
                    static_cast<rapidjson::SizeType>(value.length()));
   }
