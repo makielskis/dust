@@ -72,7 +72,7 @@ bool document::is_composite() const {
   return (v.length() > 3 && v[0] == '~');
 }
 
-std::vector<document> document::children() {
+std::vector<document> document::children() const {
   if (!is_composite()) {
     return std::vector<document>();
   }
