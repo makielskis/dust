@@ -5,11 +5,9 @@
 #ifndef DUST_JSON_VISITOR_H_
 #define DUST_JSON_VISITOR_H_
 
-#include <stack>
+#include <set>
 
 #include "rapidjson/rapidjson_with_exception.h"
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
 
 #include "./document.h"
 #include "./document_visitor.h"
@@ -22,31 +20,56 @@ template <typename Writer>
 class json_visitor : public document_visitor {
  public:
   json_visitor(Writer& writer)
-      : writer_(writer) {
+      : writer_(writer),
+        ignore_(false) {
   }
 
-  virtual void composite_start(document& doc) override {
-    writer_.StartObject();
+  virtual void composite_start(const document& doc) override {
+    if (!ignore_) {
+      writer_.StartObject();
+    }
   }
 
-  virtual void composite_end(document& doc) override {
-    writer_.EndObject();
+  virtual void composite_end(const document& doc) override {
+    if (!ignore_) {
+      writer_.EndObject();
+    } else {
+      ignore_ = false;
+    }
   }
 
-  virtual void visit_key(document& doc) override {
+  virtual void visit_key(const document& doc) override {
     std::string index = doc.index();
-		writer_.String(index.c_str(),
-                   static_cast<rapidjson::SizeType>(index.length()));
+    if (ignored_attrs_.find(index) == ignored_attrs_.end()) {
+		  writer_.String(index.c_str(),
+                     static_cast<rapidjson::SizeType>(index.length()));
+    } else {
+      ignore_ = true;
+    }
   }
 
-  virtual void visit_value(document& doc) override {
-    std::string value = doc.val();
-		writer_.String(value.c_str(),
+  virtual void visit_value(const document& doc) override {
+    if (!ignore_) {
+      std::string value = doc.val();
+	  	writer_.String(value.c_str(),
                    static_cast<rapidjson::SizeType>(value.length()));
+    } else {
+      ignore_ = false;
+    }
+  }
+
+  void ignore(const std::string& key) {
+    ignored_attrs_.insert(key);
+  }
+
+  void unignore(const std::string& key) {
+    ignored_attrs_.erase(key);
   }
 
  private:
   Writer& writer_;
+  std::set<std::string> ignored_attrs_;
+  bool ignore_;
 };
 
 }  // namespace dust

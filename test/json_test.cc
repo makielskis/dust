@@ -3,6 +3,8 @@
 #include "gtest/gtest.h"
 
 #include "rapidjson/rapidjson_with_exception.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 #include "dust/storage/mem_store.h"
 #include "dust/json_visitor.h"

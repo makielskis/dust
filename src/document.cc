@@ -72,7 +72,7 @@ bool document::is_composite() const {
   return (v.length() > 3 && v[0] == '~');
 }
 
-std::vector<document> document::children() {
+std::vector<document> document::children() const {
   if (!is_composite()) {
     return std::vector<document>();
   }
@@ -92,7 +92,7 @@ std::vector<document> document::children() {
   return children;
 }
 
-void document::accept(document_visitor& visitor) {
+void document::accept(document_visitor& visitor) const {
   if (is_composite()) {
     visitor.composite_start(*this);
     for (auto& child : children()) {

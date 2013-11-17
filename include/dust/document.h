@@ -88,10 +88,10 @@ class document {
   bool is_composite() const;
 
   /// \return the children of this document.
-  std::vector<document> children();
+  std::vector<document> children() const;
 
   /// Calls the visit methods of the visitor.
-  void accept(document_visitor& visitor);
+  void accept(document_visitor& visitor) const;
 
  protected:
   /// Transaction helper class storing actions that can then be commited.

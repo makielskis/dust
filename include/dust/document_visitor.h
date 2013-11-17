@@ -14,10 +14,10 @@ class document_visitor {
   virtual ~document_visitor() {
   }
 
-  virtual void composite_start(document& doc) = 0;
-  virtual void composite_end(document& doc) = 0;
-  virtual void visit_key(document& doc) = 0;
-  virtual void visit_value(document& doc) = 0;
+  virtual void composite_start(const document& doc) = 0;
+  virtual void composite_end(const document& doc) = 0;
+  virtual void visit_key(const document& doc) = 0;
+  virtual void visit_value(const document& doc) = 0;
 };
 
 }  // namespace dust
