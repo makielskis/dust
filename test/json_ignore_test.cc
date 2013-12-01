@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 #include "rapidjson/rapidjson_with_exception.h"
 
 #include "dust/storage/mem_store.h"
@@ -14,16 +16,16 @@ using namespace dust;
 
 typedef rapidjson::Writer<rapidjson::StringBuffer> JsonStringWriter;
 
-class json_test : public testing::Test {
+class json_ignore_test : public testing::Test {
  public:
-  json_test() : store_(std::make_shared<mem_store>()) {
+  json_ignore_test() : store_(std::make_shared<mem_store>()) {
   }
 
  protected:
   std::shared_ptr<key_value_store> store_;
 };
 
-TEST_F(json_test, from_to_test) {
+TEST_F(json_ignore_test, from_to_test) {
   std::string json_str = TEST_JSON;
 
   document config = document(store_, "users")["foo"]["bots"]["pg_hh_bot"];
@@ -37,7 +39,7 @@ TEST_F(json_test, from_to_test) {
   EXPECT_STREQ(buffer.GetString(), TEST_JSON);
 }
 
-TEST_F(json_test, to_json_test) {
+TEST_F(json_ignore_test, to_json_ignore_test) {
   document config = document(store_, "users")["foo"]["bots"]["pg_hh_bot"];
 
   config["username"] = "penner_name";
