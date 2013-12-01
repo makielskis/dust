@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <vector>
 
 #include "./storage/key_value_store.h"
 #include "./error.h"
