@@ -25,7 +25,7 @@ void mem_store::set(const std::string& key, const std::string& value) {
 }
 
 void mem_store::remove(const std::string& key) {
-  auto removed_el_count = map_.erase(key);
+  map_.erase(key);
 }
 
 std::map<std::string, std::string> mem_store::all() const {
