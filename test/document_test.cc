@@ -1,4 +1,3 @@
-#include <iostream>
 #include <memory>
 
 #include "gtest/gtest.h"
@@ -10,9 +9,10 @@
 
 using namespace dust;
 
-class document_test : public testing::Test {
+class document_test: public testing::Test {
  public:
-  document_test() : store_(std::make_shared<mem_store>()) {
+  document_test()
+      : store_(std::make_shared<mem_store>()) {
   }
 
  protected:
