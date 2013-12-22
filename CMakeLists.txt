@@ -29,9 +29,23 @@ link_directories(${CMAKE_LIBRARY_PATH})
 # Library
 ################################
 file(GLOB STORAGE_SRC_FILES src/storage/*.cc)
+file(GLOB LEVEL_DB_STORE src/storage/lvl_db_store.cc)
+list(REMOVE_ITEM STORAGE_SRC_FILES ${LEVEL_DB_STORE})
 file(GLOB DOCUMENT_DB_SRC_FILES src/*.cc)
-add_library(dust STATIC ${STORAGE_SRC_FILES} ${DOCUMENT_DB_SRC_FILES})
-target_link_libraries(dust leveldb ${Boost_SYSTEM_LIBRARY})
+if (NOT WIN32)
+  add_library(dust STATIC
+    ${STORAGE_SRC_FILES}
+    ${DOCUMENT_DB_SRC_FILES}
+    ${LEVEL_DB_STORE}
+  )
+  target_link_libraries(dust leveldb ${Boost_SYSTEM_LIBRARY})
+else()
+  add_library(dust STATIC
+    ${STORAGE_SRC_FILES}
+    ${DOCUMENT_DB_SRC_FILES}
+  )
+  target_link_libraries(dust ${Boost_SYSTEM_LIBRARY})
+endif()
 
 
 ################################
