@@ -73,8 +73,13 @@ class document {
   /// \return this document
   document& operator=(const std::string& rhs);
 
+  /// Set the value of this document and store it in the database.
+  ///
+  /// \param val  the value to assign
+  void assign(const std::string& val);
+
   /// \return the index of this document
-  const std::string& index() const;
+  std::string index() const;
 
   /// \return the actual (raw) value of this document
   std::string val() const;

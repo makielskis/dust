@@ -38,7 +38,7 @@ document::document(std::weak_ptr<key_value_store> store,
       index_(std::move(index)) {
 }
 
-const std::string& document::index() const {
+std::string document::index() const {
   return index_;
 }
 
@@ -159,6 +159,10 @@ document& document::operator=(const std::string& rhs) {
   tr = set(rhs, std::move(tr));
   tr.commit();
   return *this;
+}
+
+void document::assign(const std::string& val) {
+  operator=(val);
 }
 
 document::transaction document::set(const std::string& rhs,
