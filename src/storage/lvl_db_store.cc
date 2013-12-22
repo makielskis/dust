@@ -39,7 +39,6 @@ void lvl_db_store::set(const std::string& key, const std::string& value) {
 void lvl_db_store::remove(const std::string& key) {
   leveldb::Status s = db_->Delete(leveldb::WriteOptions(), key);
   if (!s.ok()) {
-    std::cout << s.ToString() << "\n";
     throw db_exception();
   }
 }
