@@ -73,6 +73,12 @@ class document {
   /// \return this document
   document& operator=(const std::string& rhs);
 
+  /// Compre two documents.
+  ///
+  /// \param rhs  another document
+  /// \return true when this and the other documents are equal
+  bool operator==(const document& other);
+
   /// Set the value of this document and store it in the database.
   ///
   /// \param val  the value to assign

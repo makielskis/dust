@@ -161,6 +161,12 @@ document& document::operator=(const std::string& rhs) {
   return *this;
 }
 
+bool document::operator==(const document& other) {
+  return other.get_store() == get_store() &&
+         other.path_ == path_ &&
+         other.index_ == index_;
+}
+
 void document::assign(const std::string& val) {
   operator=(val);
 }
