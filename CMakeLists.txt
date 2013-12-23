@@ -3,6 +3,16 @@ project(dust)
 
 add_definitions(-std=c++11)
 
+
+################################
+# Compile flags
+################################
+message(${CMAKE_SYSTEM_NAME})
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  add_definitions(-DOS_MACOSX)
+endif()
+
+
 add_subdirectory(external_lib/leveldb)
 include_directories("external_lib/leveldb/include")
 include_directories("external_lib/rapidjson/include")

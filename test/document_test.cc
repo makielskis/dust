@@ -75,6 +75,21 @@ TEST_F(document_test, set_fail_test) {
   EXPECT_EQ("1", store_->get("p").get());
 }
 
+TEST_F(document_test, set_fail_err_msg_test) {
+  store_->set("p", "1");
+
+  document p(store_, "p");
+  bool thrown = false;
+  try {
+    p["a"]["d"]["f"] = "2";
+  } catch (const boost::system::system_error& e) {
+    thrown = true;
+    EXPECT_TRUE(std::strstr(e.what(), "composite") != 0
+                || std::strstr(e.what(), "Composite") != 0);
+  }
+  EXPECT_TRUE(thrown);
+}
+
 TEST_F(document_test, is_composite_test) {
   document c(store_, "a");
   c = c["b"]["c"];
