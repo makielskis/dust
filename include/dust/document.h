@@ -19,7 +19,7 @@ class key_value_store;
 class document_db;
 class document_visitor;
 
-/// This delimiter is used to represent hirachies:
+/// This delimiter is used to represent hierarchies:
 ///
 /// Example:
 /// JSON value:

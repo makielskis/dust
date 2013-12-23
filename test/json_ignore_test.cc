@@ -10,7 +10,7 @@
 #include "dust/json_visitor.h"
 #include "dust/json_util.h"
 
-#define TEST_JSON "{\"test\": {\"yeah\": \"abc\"}}"
+#define TEST_JSON "{\"test\":{\"yeah\":\"abc\"}}"
 
 using namespace dust;
 

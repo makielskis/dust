@@ -34,6 +34,9 @@ std::string error_category_impl::message(int ev) const noexcept {
     case error::child_not_in_parent:
       return "Inconsistent database: child not in parent";
 
+    case error::override_with_composite:
+      return "Can't override value with composite";
+
     case error::store_dead:
       return "Database problem: reference to database lost";
 
