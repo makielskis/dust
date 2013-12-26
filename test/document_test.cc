@@ -1,4 +1,5 @@
 #include <memory>
+#include <cstring>
 
 #include "gtest/gtest.h"
 
