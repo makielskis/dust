@@ -90,6 +90,9 @@ class document {
   /// \return the actual (raw) value of this document
   std::string val() const;
 
+  /// \return JSON representation of this value
+  std::string to_json() const;
+
   /// \return whether this document exists in the store
   bool exists() const;
 

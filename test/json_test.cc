@@ -31,12 +31,9 @@ TEST_F(json_test, from_to_test) {
   document config = document(store_, "users")["foo"]["bots"]["pg_hh_bot"];
   insert_json(config, json_str);
 
-  rapidjson::StringBuffer buffer;
-  JsonStringWriter writer(buffer);
-  json_visitor<JsonStringWriter> json(writer);
-  config.accept(json);
+  std::string json = config.to_json();
 
-  EXPECT_STREQ(buffer.GetString(), TEST_JSON);
+  EXPECT_EQ(json, TEST_JSON);
 }
 
 TEST_F(json_test, to_json_test) {
@@ -51,13 +48,9 @@ TEST_F(json_test, to_json_test) {
   sell["price"] = "20";
   sell["active"] = "0";
 
-  rapidjson::StringBuffer buffer;
-  JsonStringWriter writer(buffer);
-  json_visitor<JsonStringWriter> json(writer);
-  document(store_, "users").accept(json);
-
+  std::string json = document(store_, "users").to_json();
   rapidjson::Document d;
-  ASSERT_FALSE(d.Parse<0>(buffer.GetString()).HasParseError());
+  ASSERT_FALSE(d.Parse<0>(json.c_str()).HasParseError());
 
   ASSERT_TRUE(d.IsObject());
   ASSERT_TRUE(d.HasMember("foo"));

@@ -11,9 +11,16 @@
 #include "boost/algorithm/string/split.hpp"
 #include "boost/system/system_error.hpp"
 
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/rapidjson_with_exception.h"
+
 #include "dust/storage/key_value_store.h"
 #include "dust/document_visitor.h"
 #include "dust/error.h"
+#include "dust/json_visitor.h"
+
+typedef rapidjson::Writer<rapidjson::StringBuffer> JsonStringWriter;
 
 namespace dust {
 
@@ -48,6 +55,14 @@ std::string document::val() const {
     throw boost::system::system_error(error::value_does_not_exist);
   }
   return opt_val.get();
+}
+
+std::string document::to_json() const  {
+  rapidjson::StringBuffer buffer;
+  JsonStringWriter writer(buffer);
+  json_visitor<JsonStringWriter> json(writer);
+  accept(json);
+  return buffer.GetString();
 }
 
 bool document::exists() const {

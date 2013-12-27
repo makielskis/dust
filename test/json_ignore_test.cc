@@ -25,20 +25,6 @@ class json_ignore_test : public testing::Test {
   std::shared_ptr<key_value_store> store_;
 };
 
-TEST_F(json_ignore_test, from_to_test) {
-  std::string json_str = TEST_JSON;
-
-  document config = document(store_, "users")["foo"]["bots"]["pg_hh_bot"];
-  insert_json(config, json_str);
-
-  rapidjson::StringBuffer buffer;
-  JsonStringWriter writer(buffer);
-  json_visitor<JsonStringWriter> json(writer);
-  config.accept(json);
-
-  EXPECT_STREQ(buffer.GetString(), TEST_JSON);
-}
-
 TEST_F(json_ignore_test, to_json_ignore_test) {
   document config = document(store_, "users")["foo"]["bots"]["pg_hh_bot"];
 
@@ -54,6 +40,7 @@ TEST_F(json_ignore_test, to_json_ignore_test) {
   rapidjson::StringBuffer buffer;
   JsonStringWriter writer(buffer);
   json_visitor<JsonStringWriter> json(writer);
+  json.ignore("password");
   document(store_, "users").accept(json);
 
   rapidjson::Document d;
@@ -65,4 +52,11 @@ TEST_F(json_ignore_test, to_json_ignore_test) {
   ASSERT_TRUE(d["foo"].HasMember("bots"));
   ASSERT_TRUE(d["foo"]["bots"].IsObject());
   ASSERT_TRUE(d["foo"]["bots"].HasMember("pg_hh_bot"));
+  ASSERT_TRUE(d["foo"]["bots"]["pg_hh_bot"].IsObject());
+  ASSERT_TRUE(d["foo"]["bots"]["pg_hh_bot"].HasMember("username"));
+  ASSERT_TRUE(d["foo"]["bots"]["pg_hh_bot"]["username"].IsString());
+  EXPECT_FALSE(d["foo"]["bots"]["pg_hh_bot"].HasMember("password"));
+  ASSERT_TRUE(d["foo"]["bots"]["pg_hh_bot"].HasMember("modules"));
+  ASSERT_TRUE(d["foo"]["bots"]["pg_hh_bot"]["modules"].IsObject());
+  ASSERT_TRUE(d["foo"]["bots"].IsObject());
 }
