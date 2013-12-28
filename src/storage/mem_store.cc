@@ -29,7 +29,7 @@ void mem_store::remove(const std::string& key) {
 }
 
 std::map<std::string, std::string> mem_store::all() const {
-  return { map_.begin(), map_.end() };
+  return std::map<std::string, std::string>(map_.begin(), map_.end());
 }
 
 }  // namespace dust

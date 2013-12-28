@@ -119,8 +119,16 @@ class document {
     // Disable copy, enable move.
     transaction(const transaction&) = delete;
     transaction& operator=(const transaction&) = delete;
-    transaction(transaction&&) = default;
-    transaction& operator=(transaction&&) = default;
+
+    transaction(transaction&& o) {
+      operator=(std::move(o));
+    }
+
+    transaction& operator=(transaction&& o) {
+      store_ = std::move(o.store_);
+      actions_ = std::move(o.actions_);
+      return *this;
+    }
 
     void add(const std::string& key, const std::string& value) {
       actions_[key] = value;

@@ -10,6 +10,8 @@
 #include "boost/system/system_error.hpp"
 #include "boost/type_traits.hpp"
 
+#include "dust/noexcept.h"
+
 namespace dust {
 
 namespace error {
@@ -33,15 +35,15 @@ namespace error {
     corrupt_database = 1
   };
 
-  boost::system::error_code make_error_code(error_code_t e) noexcept;
-  boost::system::error_condition make_error_condition(error_condition_t e) noexcept;
+  boost::system::error_code make_error_code(error_code_t e) DUST_NOEXCEPT;
+  boost::system::error_condition make_error_condition(error_condition_t e) DUST_NOEXCEPT;
 }
 
 class error_category_impl : public boost::system::error_category {
  public:
-  virtual const char* name() const noexcept;
-  virtual std::string message(int ev) const noexcept;
-  virtual boost::system::error_condition default_error_condition(int ev) const noexcept;
+  virtual const char* name() const DUST_NOEXCEPT;
+  virtual std::string message(int ev) const DUST_NOEXCEPT;
+  virtual boost::system::error_condition default_error_condition(int ev) const DUST_NOEXCEPT;
 };
 
 const boost::system::error_category& error_category();

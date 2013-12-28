@@ -13,9 +13,19 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 
-add_subdirectory(external_lib/leveldb)
-include_directories("external_lib/leveldb/include")
+################################
+# External libraries
+################################
+if (NOT WIN32)
+  add_subdirectory(external_lib/leveldb)
+  include_directories("external_lib/leveldb/include")
+endif()
 include_directories("external_lib/rapidjson/include")
+
+
+################################
+# Includes
+################################
 include_directories("include")
 
 
@@ -39,7 +49,7 @@ link_directories(${CMAKE_LIBRARY_PATH})
 # Library
 ################################
 file(GLOB STORAGE_SRC_FILES src/storage/*.cc)
-file(GLOB LEVEL_DB_STORE src/storage/lvl_db_store.cc)
+file(GLOB LEVEL_DB_STORE src/storage/lvl_db_store.cc src/storage/cached_db.cc)
 list(REMOVE_ITEM STORAGE_SRC_FILES ${LEVEL_DB_STORE})
 file(GLOB DOCUMENT_DB_SRC_FILES src/*.cc)
 if (NOT WIN32)
