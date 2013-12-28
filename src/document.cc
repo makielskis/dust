@@ -19,6 +19,7 @@
 #include "dust/document_visitor.h"
 #include "dust/error.h"
 #include "dust/json_visitor.h"
+#include "dust/json_util.h"
 
 typedef rapidjson::Writer<rapidjson::StringBuffer> JsonStringWriter;
 
@@ -63,6 +64,11 @@ std::string document::to_json() const  {
   json_visitor<JsonStringWriter> json(writer);
   accept(json);
   return buffer.GetString();
+}
+
+void document::from_json(const std::string& json) {
+  remove();
+  insert_json(*this, json);
 }
 
 bool document::exists() const {

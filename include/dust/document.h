@@ -93,6 +93,11 @@ class document {
   /// \return JSON representation of this value
   std::string to_json() const;
 
+  /// Load a JSON string into the document.
+  ///
+  /// \ param json  the json string to load
+  void from_json(const std::string& json);
+
   /// \return whether this document exists in the store
   bool exists() const;
 
