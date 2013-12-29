@@ -52,11 +52,6 @@ if(NOT MSVC)
 endif()
 
 
-## TEST
-add_executable(test_exe test.cc)
-target_link_libraries(test_exe dust)
-set_target_properties(test_exe PROPERTIES COMPILE_FLAGS "-std=c++11")
-
 ################################
 # Unit Tests
 ################################
