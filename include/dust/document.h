@@ -121,7 +121,8 @@ class document {
     transaction& operator=(const transaction&) = delete;
 
     transaction(transaction&& o) {
-      operator=(std::move(o));
+      store_ = std::move(o.store_);
+      actions_ = std::move(o.actions_);
     }
 
     transaction& operator=(transaction&& o) {
