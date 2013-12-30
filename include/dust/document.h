@@ -19,27 +19,6 @@ class key_value_store;
 class document_db;
 class document_visitor;
 
-/// This delimiter is used to represent hierarchies:
-///
-/// Example:
-/// JSON value:
-///    { 'a': { 'b': 'c' } }
-/// Storage representation:
-///    a   = '~[b]'
-///    a#b = 'c'
-static const char* DELIMITER = "#";
-
-/// This prefix identifies composite values (JSON objects).
-///
-/// Example:
-/// JSON value:
-///    { 'a': { 'b': 'c', 'd': 'f' } }
-/// Storage representation:
-///    a   = '~[b, d]'
-///    a#b = 'c'
-///    a#d = 'f'
-static const char COMPOSITE_VALUE_PREFIX = '~';
-
 /// A document that is stored in the database.
 class document {
  public:
@@ -188,10 +167,12 @@ class document {
 
   /// Joins the given vector to a string using the delimiter.
   ///
+  /// \param vec    the strings to join
+  /// \param delim  the delimiter to use
   /// \return the joined path string
   static std::string join(
       const std::vector<std::string>& vec,
-      const char* = DELIMITER);
+      const char* delim = "#");
 
   std::weak_ptr<key_value_store> store_;
   std::string path_;

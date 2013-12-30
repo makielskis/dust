@@ -24,13 +24,13 @@ class json_visitor : public document_visitor {
         ignore_(false) {
   }
 
-  virtual void composite_start(const document& doc) override {
+  virtual void composite_start(const document& /* doc */) override {
     if (!ignore_) {
       writer_.StartObject();
     }
   }
 
-  virtual void composite_end(const document& doc) override {
+  virtual void composite_end(const document& /* doc */) override {
     if (!ignore_) {
       writer_.EndObject();
     } else {
