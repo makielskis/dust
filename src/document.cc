@@ -25,8 +25,7 @@ typedef rapidjson::Writer<rapidjson::StringBuffer> JsonStringWriter;
 
 namespace dust {
 
-document::document(std::weak_ptr<key_value_store> store,
-                   std::string full_path)
+document::document(std::weak_ptr<key_value_store> store, std::string full_path)
     : store_(std::move(store)) {
   auto pos = full_path.rfind(DELIMITER);
   if (pos == std::string::npos) {
@@ -53,12 +52,12 @@ std::string document::index() const {
 std::string document::val() const {
   auto opt_val = get_store()->get(full_path());
   if (!opt_val) {
-    throw boost::system::system_error(error::value_does_not_exist);
+    throw boost::system::system_error(error::value_does_not_exist, full_path());
   }
   return opt_val.get();
 }
 
-std::string document::to_json() const  {
+std::string document::to_json() const {
   rapidjson::StringBuffer buffer;
   JsonStringWriter writer(buffer);
   json_visitor<JsonStringWriter> json(writer);
@@ -144,18 +143,20 @@ void document::clear_parents() {
 
   document parent(store_, path_);
   if (!parent.exists()) {
-    throw boost::system::system_error(error::parent_does_not_exist);
+    throw boost::system::system_error(error::parent_does_not_exist,
+                                      full_path());
   }
 
   if (!parent.is_composite()) {
-    throw boost::system::system_error(error::parent_not_a_composite);
+    throw boost::system::system_error(error::parent_not_a_composite,
+                                      full_path());
   }
 
   // Make sure that the parent composite document contains this document.
   std::vector<std::string> parents_childs = parent.child_keys();
   auto it = std::find(parents_childs.begin(), parents_childs.end(), index_);
   if (it == parents_childs.end()) {
-    throw boost::system::system_error(error::child_not_in_parent);
+    throw boost::system::system_error(error::child_not_in_parent, full_path());
   }
 
   // Remove this node from the parent node.
@@ -185,9 +186,8 @@ document& document::operator=(const std::string& rhs) {
 }
 
 bool document::operator==(const document& other) {
-  return other.get_store() == get_store() &&
-         other.path_ == path_ &&
-         other.index_ == index_;
+  return other.get_store() == get_store() && other.path_ == path_
+         && other.index_ == index_;
 }
 
 void document::assign(const std::string& val) {
@@ -202,7 +202,8 @@ document::transaction document::set(const std::string& rhs,
   // composite value.
   if (is_composite()) {
     if (rhs.length() < 3 || rhs[0] != COMP_PREFIX[0]) {
-      throw boost::system::system_error(error::override_with_composite);
+      throw boost::system::system_error(error::override_with_composite,
+                                        full_path());
     } else {
       tr.add(full_path(), rhs);
       return tr;
@@ -214,7 +215,8 @@ document::transaction document::set(const std::string& rhs,
     document parent(store_, path_);
     if (parent.exists()) {
       if (!parent.is_composite()) {
-        throw boost::system::system_error(error::parent_not_a_composite);
+        throw boost::system::system_error(error::parent_not_a_composite,
+                                          full_path());
       }
       std::vector<std::string> split = parent.child_keys();
       if (std::find(split.begin(), split.end(), index_) == split.end()) {
