@@ -13,6 +13,37 @@
 #include "./storage/key_value_store.h"
 #include "./error.h"
 
+
+/// This delimiter is used to represent hierarchies:
+///
+/// Example:
+/// JSON value:
+///    { 'a': { 'b': 'c' } }
+/// Storage representation:
+///    a   = '~[b]'
+///    a#b = 'c'
+#define DELIMITER "\x1F" // ASCII unit seperator
+
+/// This prefix identifies composite values (JSON objects).
+///
+/// Example:
+/// JSON value:
+///    { 'a': { 'b': 'c', 'd': 'f' } }
+/// Storage representation:
+///    a   = '~[b,d]'
+///    a#b = 'c'
+///    a#d = 'f'
+#define COMP_PREFIX "\x01" // ASCII start of heading
+
+// This character marks the begin of a sub-items listing
+#define LIST_START "\x02" // ASCII start of text
+
+// This character marks the end of a sub-items listing
+#define LIST_END "\x03" // ASCII end of text
+
+// This character seperates items in a sub-items listing
+#define LIST_SEP "\x1E" // ASCII record seperator
+
 namespace dust {
 
 class key_value_store;

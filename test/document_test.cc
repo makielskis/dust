@@ -21,33 +21,33 @@ class document_test: public testing::Test {
 };
 
 TEST_F(document_test, delete_test) {
-  store_->set("t", "~[q,s]");
-  store_->set("t#q", "~[p]");
-  store_->set("t#q#p", "~[a]");
-  store_->set("t#q#p#a", "~[b,c,d]");
-  store_->set("t#q#p#a#b", "1");
-  store_->set("t#q#p#a#c", "2");
-  store_->set("t#q#p#a#d", "~[e,f]");
-  store_->set("t#q#p#a#d#e", "3");
-  store_->set("t#q#p#a#d#f", "4");
-  store_->set("t#s", "5");
+  store_->set("t", COMP_PREFIX LIST_START "q" LIST_SEP "s" LIST_END);
+  store_->set("t" DELIMITER "q", COMP_PREFIX LIST_START "p" LIST_END);
+  store_->set("t" DELIMITER "q" DELIMITER "p", COMP_PREFIX LIST_START "a" LIST_END);
+  store_->set("t" DELIMITER "q" DELIMITER "p" DELIMITER "a", COMP_PREFIX LIST_START "b" LIST_SEP "c" LIST_SEP "d" LIST_END);
+  store_->set("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "b", "1");
+  store_->set("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "c", "2");
+  store_->set("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "d", COMP_PREFIX LIST_START "e" LIST_SEP "f" LIST_END);
+  store_->set("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "d" DELIMITER "e", "3");
+  store_->set("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "d" DELIMITER "f", "4");
+  store_->set("t" DELIMITER "s", "5");
 
   document a(store_, "t");
   a = a["q"]["p"]["a"];
   a.remove();
 
   ASSERT_TRUE(store_->get("t"));
-  EXPECT_EQ("~[s]", store_->get("t").get());
-  ASSERT_TRUE(store_->get("t#s"));
-  EXPECT_EQ("5", store_->get("t#s").get());
-  EXPECT_FALSE(store_->get("t#q"));
-  EXPECT_FALSE(store_->get("t#q#p"));
-  EXPECT_FALSE(store_->get("t#q#p#a"));
-  EXPECT_FALSE(store_->get("t#q#p#a#b"));
-  EXPECT_FALSE(store_->get("t#q#p#p#a#b"));
-  EXPECT_FALSE(store_->get("t#q#p#a#d"));
-  EXPECT_FALSE(store_->get("t#q#p#a#d#e"));
-  EXPECT_FALSE(store_->get("t#q#p#a#d#f"));
+  EXPECT_EQ(COMP_PREFIX LIST_START "s" LIST_END, store_->get("t").get());
+  ASSERT_TRUE(store_->get("t" DELIMITER "s"));
+  EXPECT_EQ("5", store_->get("t" DELIMITER "s").get());
+  EXPECT_FALSE(store_->get("t" DELIMITER "q"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p" DELIMITER "a"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "b"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p" DELIMITER "p" DELIMITER "a" DELIMITER "b"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "d"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "d" DELIMITER "e"));
+  EXPECT_FALSE(store_->get("t" DELIMITER "q" DELIMITER "p" DELIMITER "a" DELIMITER "d" DELIMITER "f"));
 }
 
 TEST_F(document_test, set_test) {
@@ -56,12 +56,12 @@ TEST_F(document_test, set_test) {
   c = "1";
 
   ASSERT_TRUE(store_->get("a"));
-  ASSERT_TRUE(store_->get("a#b"));
-  ASSERT_TRUE(store_->get("a#b#c"));
+  ASSERT_TRUE(store_->get("a" DELIMITER "b"));
+  ASSERT_TRUE(store_->get("a" DELIMITER "b" DELIMITER "c"));
 
-  EXPECT_EQ("~[b]", store_->get("a").get());
-  EXPECT_EQ("~[c]", store_->get("a#b").get());
-  EXPECT_EQ("1", store_->get("a#b#c").get());
+  EXPECT_EQ(COMP_PREFIX LIST_START "b" LIST_END, store_->get("a").get());
+  EXPECT_EQ(COMP_PREFIX LIST_START "c" LIST_END, store_->get("a" DELIMITER "b").get());
+  EXPECT_EQ("1", store_->get("a" DELIMITER "b" DELIMITER "c").get());
 }
 
 TEST_F(document_test, override_value_fail_test) {
@@ -69,9 +69,9 @@ TEST_F(document_test, override_value_fail_test) {
 
   document p(store_, "p");
   EXPECT_THROW(p["a"]["d"]["f"] = "2", boost::system::system_error);
-  EXPECT_FALSE(store_->get("p#a#d#f"));
-  EXPECT_FALSE(store_->get("p#a#d"));
-  EXPECT_FALSE(store_->get("p#a"));
+  EXPECT_FALSE(store_->get("p" DELIMITER "a" DELIMITER "d" DELIMITER "f"));
+  EXPECT_FALSE(store_->get("p" DELIMITER "a" DELIMITER "d"));
+  EXPECT_FALSE(store_->get("p" DELIMITER "a"));
   ASSERT_TRUE(store_->get("p"));
   EXPECT_EQ("1", store_->get("p").get());
 }
@@ -92,8 +92,8 @@ TEST_F(document_test, override_value_error_message_test) {
 }
 
 TEST_F(document_test, override_composite_fail_test) {
-  store_->set("p", "~[a]");
-  store_->set("p#a", "1");
+  store_->set("p", COMP_PREFIX LIST_START "a" LIST_END);
+  store_->set("p" DELIMITER "a", "1");
 
   document p(store_, "p");
   EXPECT_THROW({
@@ -102,8 +102,8 @@ TEST_F(document_test, override_composite_fail_test) {
 }
 
 TEST_F(document_test, override_composite_error_message_test) {
-  store_->set("p", "~[a]");
-  store_->set("p#a", "1");
+  store_->set("p", COMP_PREFIX LIST_START "a" LIST_END);
+  store_->set("p" DELIMITER "a", "1");
 
   document p(store_, "p");
   bool thrown = false;

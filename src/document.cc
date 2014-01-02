@@ -21,27 +21,6 @@
 #include "dust/json_visitor.h"
 #include "dust/json_util.h"
 
-/// This delimiter is used to represent hierarchies:
-///
-/// Example:
-/// JSON value:
-///    { 'a': { 'b': 'c' } }
-/// Storage representation:
-///    a   = '~[b]'
-///    a#b = 'c'
-static const char* DELIMITER = "#";
-
-/// This prefix identifies composite values (JSON objects).
-///
-/// Example:
-/// JSON value:
-///    { 'a': { 'b': 'c', 'd': 'f' } }
-/// Storage representation:
-///    a   = '~[b, d]'
-///    a#b = 'c'
-///    a#d = 'f'
-//static const char COMPOSITE_VALUE_PREFIX = '~';
-
 typedef rapidjson::Writer<rapidjson::StringBuffer> JsonStringWriter;
 
 namespace dust {
@@ -111,7 +90,7 @@ bool document::is_composite() const {
   }
 
   std::string v = val();
-  return (v.length() > 3 && v[0] == '~');
+  return (v.length() > 3 && v[0] == COMP_PREFIX[0]);
 }
 
 std::vector<document> document::children() const {
@@ -123,7 +102,7 @@ std::vector<document> document::children() const {
   std::string v = val();
   std::string keys = v.substr(2, v.length() - 3);
   std::vector<std::string> split;
-  boost::split(split, keys, boost::algorithm::is_any_of(","));
+  boost::split(split, keys, boost::algorithm::is_any_of(LIST_SEP));
 
   // Create child documents using the document::operator[]() operator.
   std::vector<document> children;
@@ -190,7 +169,9 @@ void document::clear_parents() {
     parent.clear_parents();
   } else {
     // Set the remaining children.
-    std::string new_val = std::string("~[") + join(parents_childs, ",") + "]";
+    std::string new_val = COMP_PREFIX LIST_START +
+                          join(parents_childs, LIST_SEP) +
+                          LIST_END;
     get_store()->set(parent.full_path(), new_val);
   }
 }
@@ -220,7 +201,7 @@ document::transaction document::set(const std::string& rhs,
   // If this is a composite value: allow only changing it to another
   // composite value.
   if (is_composite()) {
-    if (rhs.length() < 3 || rhs[0] != '~') {
+    if (rhs.length() < 3 || rhs[0] != COMP_PREFIX[0]) {
       throw boost::system::system_error(error::override_with_composite);
     } else {
       tr.add(full_path(), rhs);
@@ -238,11 +219,14 @@ document::transaction document::set(const std::string& rhs,
       std::vector<std::string> split = parent.child_keys();
       if (std::find(split.begin(), split.end(), index_) == split.end()) {
         split.push_back(index_);
-        std::string new_parent_val = std::string("~[") + join(split, ",") + "]";
+        std::string new_parent_val = std::string(COMP_PREFIX LIST_START) +
+                                     join(split, LIST_SEP) +
+                                     LIST_END;
         tr = parent.set(new_parent_val, std::move(tr));
       }
     } else {
-      tr = parent.set(std::string("~[") + index_ + "]", std::move(tr));
+      tr = parent.set(std::string(COMP_PREFIX LIST_START) + index_ + LIST_END,
+                      std::move(tr));
     }
   }
 
@@ -258,7 +242,7 @@ std::vector<std::string> document::child_keys() const {
   std::string value = val();
   std::string keys = value.substr(2, value.length() - 3);
   std::vector<std::string> split;
-  boost::split(split, keys, boost::algorithm::is_any_of(","));
+  boost::split(split, keys, boost::algorithm::is_any_of(LIST_SEP));
 
   return split;
 }
