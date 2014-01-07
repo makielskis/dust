@@ -123,6 +123,9 @@ class document {
   /// Calls the visit methods of the visitor.
   void accept(document_visitor& visitor) const;
 
+  /// \return the full path of this document
+  std::string full_path() const;
+
  protected:
   /// Transaction helper class storing actions that can then be commited.
   class transaction {
@@ -188,9 +191,6 @@ class document {
   /// \return the child keys of this node if it is a composite document
   ///         otherwise an empty vector
   std::vector<std::string> child_keys() const;
-
-  /// \return the full path of this document
-  std::string full_path() const;
 
   /// Aquires a lock for the document::store_ pointer.
   /// Throws an runtime error if this fails.
