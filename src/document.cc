@@ -71,7 +71,7 @@ void document::from_json(const std::string& json) {
 }
 
 bool document::exists() const {
-  return get_store()->get(full_path());
+  return static_cast<bool>(get_store()->get(full_path()));
 }
 
 void document::remove() {
