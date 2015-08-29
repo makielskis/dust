@@ -7,20 +7,20 @@
 namespace dust {
 
 namespace error {
-  boost::system::error_code make_error_code(error_code_t e) DUST_NOEXCEPT {
+  boost::system::error_code make_error_code(error_code_t e) noexcept {
     return boost::system::error_code(static_cast<int>(e), error_category());
   }
 
-  boost::system::error_condition make_error_condition(error_condition_t e) DUST_NOEXCEPT {
+  boost::system::error_condition make_error_condition(error_condition_t e) noexcept {
     return boost::system::error_condition(static_cast<int>(e), error_category());
   }
 }  // namespace error
 
-const char* error_category_impl::name() const DUST_NOEXCEPT{
+const char* error_category_impl::name() const noexcept {
     return "dust";
 }
 
-std::string error_category_impl::message(int ev) const DUST_NOEXCEPT{
+std::string error_category_impl::message(int ev) const noexcept  {
   switch (ev) {
     case error::value_does_not_exist:
       return "Database value does not exist";
@@ -52,7 +52,7 @@ std::string error_category_impl::message(int ev) const DUST_NOEXCEPT{
 }
 
 boost::system::error_condition
-error_category_impl::default_error_condition(int ev) const DUST_NOEXCEPT{
+error_category_impl::default_error_condition(int ev) const noexcept {
   switch (ev)
   {
     case error::parent_does_not_exist:
