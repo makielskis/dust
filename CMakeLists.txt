@@ -6,8 +6,8 @@ project(dust)
 # External libraries
 ################################
 add_subdirectory(external_lib/leveldb)
-include_directories("external_lib/leveldb/include")
-include_directories("external_lib/rapidjson/include")
+include_directories(SYSTEM "external_lib/leveldb/include")
+include_directories(SYSTEM "external_lib/rapidjson/include")
 
 
 ################################
@@ -25,9 +25,9 @@ find_package(Boost COMPONENTS
   filesystem
 REQUIRED)
 if(Boost_FOUND)
-	include_directories(${Boost_INCLUDE_DIR})
+  include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 else(Boost_FOUND)
-	message("No Boost found.")
+  message("No Boost found.")
 endif(Boost_FOUND)
 link_directories(${CMAKE_LIBRARY_PATH})
 
@@ -59,7 +59,7 @@ if (NOT TARGET gtest)
   add_subdirectory(test/gtest-1.7.0 EXCLUDE_FROM_ALL)
   enable_testing()
 endif()
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(SYSTEM ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 file(GLOB TEST_FILES test/*.cc)
 add_executable(dust-tests EXCLUDE_FROM_ALL ${TEST_FILES})
