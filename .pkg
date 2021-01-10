@@ -5,7 +5,7 @@
 [leveldb]
   url=git@github.com:makielskis/leveldb.git
   branch=master
-  commit=8f04b7679d055f241ee5975f58f427ec3db778ba
+  commit=70dff59fb05f5a0e7f4d3d628c3c3a70ff21db29
 [boost]
   url=git@github.com:motis-project/boost.git
   branch=master
