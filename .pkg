@@ -13,4 +13,4 @@
 [googletest]
   url=git@github.com:motis-project/googletest.git
   branch=master
-  commit=36386d6c87ebd6acd593bfcf1923502e6e48593d
+  commit=4090e5108a370c72459d58dabb02b4eaa159d7c8
