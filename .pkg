@@ -1,0 +1,16 @@
+[rapidjson]
+  url=git@github.com:makielskis/rapidjson.git
+  branch=master
+  commit=5b13fac45f840b49e79429e860d29be748e5c300
+[leveldb]
+  url=git@github.com:makielskis/leveldb.git
+  branch=master
+  commit=8f04b7679d055f241ee5975f58f427ec3db778ba
+[boost]
+  url=git@github.com:motis-project/boost.git
+  branch=master
+  commit=03a2fc17e1104524da91e3a8a55ca6e09190b4c9
+[googletest]
+  url=git@github.com:motis-project/googletest.git
+  branch=master
+  commit=36386d6c87ebd6acd593bfcf1923502e6e48593d

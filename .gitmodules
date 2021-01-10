@@ -1,3 +1,0 @@
-[submodule "external_lib/leveldb"]
-	path = external_lib/leveldb
-	url = git@bitbucket.org:makielski/leveldb.git

@@ -1,36 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project(dust)
 
-
-################################
-# External libraries
-################################
-add_subdirectory(external_lib/leveldb)
-include_directories(SYSTEM "external_lib/leveldb/include")
-include_directories(SYSTEM "external_lib/rapidjson/include")
-
-
-################################
-# Includes
-################################
-include_directories("include")
-
-
-################################
-# Boost
-################################
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost COMPONENTS
-  system
-  filesystem
-REQUIRED)
-if(Boost_FOUND)
-  include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-else(Boost_FOUND)
-  message("No Boost found.")
-endif(Boost_FOUND)
-link_directories(${CMAKE_LIBRARY_PATH})
-
+include(cmake/pkg.cmake)
 
 ################################
 # Library
@@ -41,7 +12,8 @@ add_library(dust STATIC
   ${STORAGE_SRC_FILES}
   ${DOCUMENT_DB_SRC_FILES}
 )
-target_link_libraries(dust leveldb)
+target_link_libraries(dust rapidjson boost boost-filesystem leveldb)
+target_include_directories(dust PUBLIC include)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(_definitions OS_MACOSX)
