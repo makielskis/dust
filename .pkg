@@ -1,7 +1,7 @@
 [rapidjson]
-  url=git@github.com:makielskis/rapidjson.git
+  url=git@github.com:motis-project/rapidjson.git
   branch=master
-  commit=5b13fac45f840b49e79429e860d29be748e5c300
+  commit=d00b1ceed14d146944ac3ad4f956396141f86f48
 [leveldb]
   url=git@github.com:makielskis/leveldb.git
   branch=master

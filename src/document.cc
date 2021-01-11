@@ -11,7 +11,7 @@
 #include "boost/algorithm/string/split.hpp"
 #include "boost/system/system_error.hpp"
 
-#include "rapidjson/rapidjson_with_exception.h"
+#include "rapidjson/rapidjson.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 

@@ -7,7 +7,7 @@
 
 #include <set>
 
-#include "rapidjson/rapidjson_with_exception.h"
+#include "rapidjson/rapidjson.h"
 
 #include "./document.h"
 #include "./document_visitor.h"

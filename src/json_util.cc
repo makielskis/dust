@@ -4,7 +4,7 @@
 
 #include "dust/json_util.h"
 
-#include "rapidjson/rapidjson_with_exception.h"
+#include "rapidjson/document.h"
 
 #include "dust/document.h"
 #include "dust/error.h"
